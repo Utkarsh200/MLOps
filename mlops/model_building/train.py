@@ -115,7 +115,7 @@ for i in range(len(results['params'])):
 best_model = grid_search.best_estimator_
 print("Best model obtained from GridSearchCV.")
 
-# classification_threshold = 0.45
+classification_threshold = 0.45
 
 print("Calculating predictions and evaluation metrics...")
 y_pred_train_proba = best_model.predict_proba(Xtrain)[:, 1]
