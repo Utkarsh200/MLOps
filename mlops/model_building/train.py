@@ -14,10 +14,10 @@ import os
 # for hugging face space authentication to upload files
 from huggingface_hub import login, HfApi, create_repo
 from huggingface_hub.utils import RepositoryNotFoundError, HfHubHTTPError
-import mlflow
+#import mlflow
 
-mlflow.set_tracking_uri("http://localhost:5000")
-mlflow.set_experiment("mlops-training-experiment")
+# mlflow.set_tracking_uri("http://localhost:5000")
+# mlflow.set_experiment("mlops-training-experiment")
 
 api = HfApi()
 
@@ -103,13 +103,13 @@ for i in range(len(results['params'])):
     std_score = results['std_test_score'][i]
 
     # Log each combination as a separate MLflow run
-    with mlflow.start_run(nested=True):
-        mlflow.log_params(param_set)
-        mlflow.log_metric("mean_test_score", mean_score)
-        mlflow.log_metric("std_test_score", std_score)
+    # with mlflow.start_run(nested=True):
+    #     mlflow.log_params(param_set)
+    #     mlflow.log_metric("mean_test_score", mean_score)
+    #     mlflow.log_metric("std_test_score", std_score)
 
 # Log best parameters separately in main run
-mlflow.log_params(grid_search.best_params_)
+# mlflow.log_params(grid_search.best_params_)
 
 # Store and evaluate the best model
 best_model = grid_search.best_estimator_
@@ -129,24 +129,24 @@ test_report = classification_report(ytest, y_pred_test, output_dict=True)
 print("Evaluation metrics calculated.")
 
 # Log the metrics for the best model
-mlflow.log_metrics({
-    "train_accuracy": train_report['accuracy'],
-    "train_precision": train_report['1']['precision'],
-    "train_recall": train_report['1']['recall'],
-    "train_f1-score": train_report['1']['f1-score'],
-    "test_accuracy": test_report['accuracy'],
-    "test_precision": test_report['1']['precision'],
-    "test_recall": test_report['1']['recall'],
-    "test_f1-score": test_report['1']['f1-score']
-})
+# mlflow.log_metrics({
+#     "train_accuracy": train_report['accuracy'],
+#     "train_precision": train_report['1']['precision'],
+#     "train_recall": train_report['1']['recall'],
+#     "train_f1-score": train_report['1']['f1-score'],
+#     "test_accuracy": test_report['accuracy'],
+#     "test_precision": test_report['1']['precision'],
+#     "test_recall": test_report['1']['recall'],
+#     "test_f1-score": test_report['1']['f1-score']
+# })
 
 # Save the model locally
 model_path = "tourism_model_v1.joblib"
 joblib.dump(best_model, model_path)
 
 # Log the model artifact
-mlflow.log_artifact(model_path, artifact_path="model")
-print(f"Model saved locally at: {model_path}")
+# mlflow.log_artifact(model_path, artifact_path="model")
+# print(f"Model saved locally at: {model_path}")
 
 # Upload to Hugging Face
 repo_id = "kutkarsh200/tourism-model"
